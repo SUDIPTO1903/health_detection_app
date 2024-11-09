@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fever Detection</title>
+    <link rel="icon" href="{{ url_for('favicon') }}" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #video {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fever Detection with Thermal Imaging</h1>
+
+    <!-- Live video feed -->
+    <img id="video" src="{{ url_for('video_feed') }}" width="640" height="480" alt="Live Video Feed">
+
+    <!-- Button to trigger fever prediction -->
+    <button onclick="startFeverPrediction()">Start Fever Prediction</button>
+
+    <p id="result"></p>
+
+    <script>
+        // Function to trigger fever prediction via the Flask route
+        async function startFeverPrediction() {
+            document.getElementById('result').innerText = "Running fever prediction...";
+            try {
+                const response = await fetch('/predict_fever', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                document.getElementById('result').innerText = data.status;
+            } catch (error) {
+                document.getElementById('result').innerText = "Error: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
